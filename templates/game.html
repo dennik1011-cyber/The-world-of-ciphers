@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ level_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>{{ level_name }}</h1>
+
+    <div class="cipher-box">
+        {{ cipher }}
+    </div>
+
+    {% if result %}
+
+        <div class="result">
+            {{ result }}
+        </div>
+
+        <div class="correct">
+            Правильный ответ: {{ correct }}
+        </div>
+
+        <a href="/" class="menu-button">
+            В меню
+        </a>
+
+        <a href="/play/{{ level }}" class="menu-button">
+            Продолжить
+        </a>
+
+    {% else %}
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="answer"
+                placeholder="Введите ответ"
+                required
+            >
+
+            <input
+                type="hidden"
+                name="original"
+                value="{{ original }}"
+            >
+
+            <input
+                type="hidden"
+                name="cipher"
+                value="{{ cipher }}"
+            >
+
+            <button type="submit">
+                Проверить
+            </button>
+
+        </form>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
