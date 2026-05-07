@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+
+<h1>Регистрация</h1>
+
+{% if message %}
+<p class="message">{{ message }}</p>
+{% endif %}
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+        {{ form.login(class="form-input", placeholder="Логин") }}
+    </div>
+    <div class="form-group">
+        {{ form.password(class="form-input", placeholder="Пароль") }}
+    </div>
+    <div class="form-group">
+        {{ form.password_again(class="form-input", placeholder="Повторите пароль") }}
+    </div>
+
+    <button type="submit">Зарегистрироваться</button>
+</form>
+
+<p style="margin-top: 20px;">
+    <a href="/login" style="color: #00ff88;">Уже есть аккаунт? Войти</a>
+</p>
+<p><a href="/" class="menu-button">В меню</a></p>
+
+{% endblock %}

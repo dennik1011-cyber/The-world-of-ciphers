@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+
+<h1>Вход</h1>
+
+{% if message %}
+<p class="message">{{ message }}</p>
+{% endif %}
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+        {{ form.login(class="form-input", placeholder="Логин") }}
+    </div>
+    <div class="form-group">
+        {{ form.password(class="form-input", placeholder="Пароль") }}
+    </div>
+    <div class="form-group checkbox-group">
+        {{ form.remember_me() }} {{ form.remember_me.label }}
+    </div>
+
+    <button type="submit">Войти</button>
+</form>
+
+<p style="margin-top: 20px;">
+    <a href="/register" style="color: #00ff88;">Регистрация</a>
+</p>
+<p><a href="/" class="menu-button">В меню</a></p>
+
+{% endblock %}
