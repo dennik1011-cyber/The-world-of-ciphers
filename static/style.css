@@ -243,3 +243,26 @@ button:hover {
 .auth-button:hover {
     background: #00cc6a;
 }
+
+.guide-box {
+    width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 15px;
+    text-align: left;
+}
+
+.guide-box h2 {
+    color: #00ff88;
+    margin-bottom: 20px;
+}
+
+.guide-box pre {
+    white-space: pre-wrap;
+    color: #c9d1d9;
+    line-height: 1.8;
+    font-size: 17px;
+    font-family: Arial;
+}

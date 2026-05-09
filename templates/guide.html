@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Справка по шифрам{% endblock %}
+
+{% block content %}
+
+<h1>Энциклопедия шифров</h1>
+
+{% for key, guide in guides.items() %}
+
+<div class="guide-box">
+
+    <h2>{{ key }}. {{ guide.name }}</h2>
+
+    <pre>{{ guide.description }}</pre>
+
+</div>
+
+{% endfor %}
+
+<a href="/" class="menu-button">В меню</a>
+
+{% endblock %}
