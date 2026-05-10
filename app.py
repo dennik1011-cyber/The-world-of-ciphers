@@ -163,16 +163,9 @@ def play(level):
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
     if request.method == 'POST':
-
         response = make_response(redirect('/settings'))
-
-        response.set_cookie(
-            'theme',
-            request.form.get('theme', 'dark')
-        )
-
+        response.set_cookie('theme', request.form.get('theme', 'dark'), max_age=60*60*24*365)
         return response
-
     return render_template('settings.html')
 
 

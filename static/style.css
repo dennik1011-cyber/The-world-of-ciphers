@@ -284,3 +284,185 @@ button:hover {
     color: #0d1117;
     border-color: #ffcc00;
 }
+/* === СВЕТЛАЯ ТЕМА === */
+
+body.light {
+    background: #f0f0e8;
+    color: #1a3300;
+    font-family: 'Courier New', monospace;
+}
+
+body.light::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+    );
+}
+
+body.light h1 {
+    color: #2d5a00;
+    text-shadow: 0 0 2px rgba(45, 90, 0, 0.3);
+}
+
+body.light .big-title {
+    color: #2d5a00;
+    text-shadow: 0 0 4px rgba(45, 90, 0, 0.4);
+}
+
+body.light .subtitle {
+    color: #3d7a00;
+}
+
+body.light .level-button {
+    background: #fafaf2;
+    color: #1a3300;
+    border: 1px solid #8faa6f;
+    font-family: 'Courier New', monospace;
+}
+
+body.light .level-button:hover {
+    background: #e8f0d8;
+    border-color: #2d5a00;
+    color: #2d5a00;
+    box-shadow: 0 0 10px rgba(45, 90, 0, 0.15);
+}
+
+body.light .cipher-box {
+    color: #2d5a00;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 3px rgba(45, 90, 0, 0.4);
+}
+
+body.light .menu-button {
+    background: #e8ecdf;
+    color: #1a3300;
+    border: 1px solid #8faa6f;
+}
+
+body.light .menu-button:hover {
+    background: #d4e0c0;
+    border-color: #2d5a00;
+}
+
+body.light .help-button {
+    background: #fafaf2;
+    color: #664400;
+    border: 1px solid #aa8f4f;
+}
+
+body.light .help-button:hover {
+    background: #fff0d0;
+    border-color: #664400;
+    color: #1a3300;
+}
+
+body.light .auth-button {
+    background: #2d5a00;
+    color: #f0f0e8;
+}
+
+body.light .auth-button:hover {
+    background: #3d7a00;
+    box-shadow: 0 0 12px rgba(45, 90, 0, 0.4);
+}
+
+body.light .top-link {
+    color: #5a7a3a;
+}
+
+body.light .top-link:hover {
+    color: #2d5a00;
+}
+
+body.light .user-name {
+    color: #2d5a00;
+}
+
+body.light .login-message {
+    color: #5a7a3a;
+}
+
+body.light .setting-box {
+    background: #fafaf2;
+    border-color: #8faa6f;
+}
+
+body.light .setting-box label {
+    color: #2d5a00;
+}
+
+body.light .setting-box select {
+    background: #fafaf2;
+    color: #1a3300;
+    border-color: #8faa6f;
+    font-family: 'Courier New', monospace;
+}
+
+body.light .message {
+    color: #aa0000;
+}
+
+body.light .correct {
+    color: #664400;
+}
+
+body.light .result {
+    color: #2d5a00;
+}
+
+body.light input[type="text"],
+body.light input[type="password"] {
+    background: #fafaf2;
+    color: #1a3300;
+    border: 1px solid #8faa6f;
+    font-family: 'Courier New', monospace;
+}
+
+body.light input[type="text"]:focus,
+body.light input[type="password"]:focus {
+    outline: none;
+    border-color: #2d5a00;
+    box-shadow: 0 0 5px rgba(45, 90, 0, 0.3);
+}
+
+body.light button {
+    background: #2d5a00;
+    color: #f0f0e8;
+    font-family: 'Courier New', monospace;
+}
+
+body.light button:hover {
+    background: #3d7a00;
+}
+
+body.light .checkbox-group label {
+    color: #5a7a3a;
+}
+
+body.light .guide-box {
+    background: #fafaf2;
+    border-color: #8faa6f;
+}
+
+body.light .guide-box h2 {
+    color: #2d5a00;
+}
+
+body.light .guide-box pre {
+    color: #1a3300;
+}
+
+body.light .setting-box input[type="range"] {
+    accent-color: #2d5a00;
+}

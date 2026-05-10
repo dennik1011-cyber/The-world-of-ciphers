@@ -7,36 +7,10 @@
 
 <form method="POST">
     <div class="setting-box">
-        Музыка
-        <input type="checkbox" name="music" value="on"
-               {{ 'checked' if request.cookies.get('music') == 'on' }}>
-    </div>
-    <div class="setting-box">
-        Громкость
-        <input type="range" name="volume" min="0" max="100"
-               value="{{ request.cookies.get('volume', '75') }}">
-    </div>
-    <div class="setting-box">
-        Тема интерфейса
+        <label>Тема интерфейса</label>
         <select name="theme">
-            <option value="light" {{
-            'selected' if request.cookies.get('theme') == 'light' }}>Светлая</option>
-            <option value="dark" {{
-            'selected' if request.cookies.get('theme') == 'dark' }}>Тёмная</option>
-        </select>
-    </div>
-    <div class="setting-box">
-        Анимации
-        <input type="checkbox" name="animations" value="on"
-               {{ 'checked' if request.cookies.get('animations') == 'on' }}>
-    </div>
-    <div class="setting-box">
-        Язык сайта
-        <select name="language">
-            <option value="ru" {{
-            'selected' if request.cookies.get('language', 'ru') == 'ru' }}>Русский</option>
-            <option value="en" {{
-            'selected' if request.cookies.get('language') == 'en' }}>English</option>
+            <option value="dark" {% if request.cookies.get('theme', 'dark') == 'dark' %}selected{% endif %}>Тёмная</option>
+            <option value="light" {% if request.cookies.get('theme') == 'light' %}selected{% endif %}>Светлая</option>
         </select>
     </div>
 
