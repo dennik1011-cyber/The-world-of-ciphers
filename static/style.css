@@ -266,3 +266,21 @@ button:hover {
     font-size: 17px;
     font-family: Arial;
 }
+.help-button {
+    display: inline-block;
+    margin: 15px auto;
+    padding: 12px 25px;
+    background: #21262d;
+    color: #ffcc00;
+    text-decoration: none;
+    border-radius: 10px;
+    border: 1px solid #ffcc00;
+    font-size: 16px;
+    transition: all 0.2s;
+}
+
+.help-button:hover {
+    background: #ffcc00;
+    color: #0d1117;
+    border-color: #ffcc00;
+}

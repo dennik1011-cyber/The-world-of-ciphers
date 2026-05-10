@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if current_level %}Помощь — {{ levels[current_level] }}{% else %}Справка по шифрам{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<h1>
+    {% if current_level %}
+        {{ levels[current_level] }}
+    {% else %}
+        Все шифры
+    {% endif %}
+</h1>
+
+{% for key, guide in cipher_help.items() %}
+<div class="guide-box">
+    <h2>{{ key }}. {{ guide.name }}</h2>
+    <pre>{{ guide.description }}</pre>
+</div>
+{% endfor %}
+
+{% if current_level %}
+<a href="/play/{{ current_level }}" class="menu-button">← Назад к уровню</a>
+{% else %}
+<a href="/" class="menu-button">В меню</a>
+{% endif %}
+
+{% endblock %}
