@@ -1,7 +1,6 @@
 import random
 
 ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-RUS = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
 
 
 # 11. Виженер

@@ -1,5 +1,6 @@
 import os
 import random
+from faker import Faker
 
 from flask import Flask, render_template, request, redirect, make_response
 from flask_login import login_user, login_required, logout_user, LoginManager
@@ -8,7 +9,7 @@ from ciphers import easy, normal
 from data import db_session
 from data.users import User
 from forms.users import RegisterForm, LoginForm
-from ciphers.constants import levels, easy_words, medium_words, cipher_guides
+from ciphers.constants import levels, cipher_guides
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cipher_secret_key'
@@ -67,9 +68,9 @@ def play(level):
         )
 
     if level <= 10:
-        word = random.choice(easy_words)
+        word = Faker('ru_RU').word().upper()
     else:
-        word = random.choice(medium_words)
+        word = Faker('en_US').word().upper()
 
     # EASY
 
