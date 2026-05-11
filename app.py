@@ -15,7 +15,6 @@ from data.users import User
 from forms.users import RegisterForm, LoginForm
 from ciphers.constants import levels, cipher_guides
 
-
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -24,14 +23,14 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-
-
 
 
 @app.route("/")
@@ -54,7 +53,6 @@ def help_page(level=None):
 @app.route("/play/<int:level>", methods=["GET", "POST"])
 @login_required
 def play(level):
-
     result = None
     correct = None
     extra = None
@@ -150,7 +148,7 @@ def play(level):
         cipher_text, key = normal.gronsfeld_cipher(word)
         extra = f"Ключ: {key}"
 
-    #MEDIUM
+    # MEDIUM
     elif level == 11:
         cipher_text, key = medium.vigenere_cipher(word)
         extra = f"Ключ: {key}"
@@ -167,7 +165,7 @@ def play(level):
     elif level == 15:
         cipher_text = medium.trithemius_cipher(word)
 
-    #HARD
+    # HARD
     elif level == 16:
         cipher_text = hard.rail_fence_cipher(word)
 
@@ -200,7 +198,7 @@ def play(level):
 def settings():
     if request.method == 'POST':
         response = make_response(redirect('/settings'))
-        response.set_cookie('theme', request.form.get('theme', 'dark'), max_age=60*60*24*365)
+        response.set_cookie('theme', request.form.get('theme', 'dark'), max_age=60 * 60 * 24 * 365)
         return response
     return render_template('settings.html')
 
@@ -222,13 +220,11 @@ def load_user(user_id):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-
     form = RegisterForm()
 
     if form.validate_on_submit():
 
         if form.password.data != form.password_again.data:
-
             return render_template(
                 'register.html',
                 form=form,
@@ -238,7 +234,6 @@ def register():
         db_sess = db_session.create_session()
 
         if db_sess.query(User).filter(User.login == form.login.data).first():
-
             return render_template(
                 'register.html',
                 form=form,
@@ -264,7 +259,6 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -276,7 +270,6 @@ def login():
         ).first()
 
         if user and user.check_password(form.password.data):
-
             login_user(
                 user,
                 remember=form.remember_me.data
@@ -302,7 +295,9 @@ def logout():
     logout_user()
     return redirect("/")
 
+
 from flask_login import login_user
+
 
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -346,6 +341,64 @@ def profile():
             message = 'Аватар обновлён!'
 
     return render_template('profile.html', user=user, message=message)
+
+
+# Рейтинг и количество решенных шифров по категориям пользователя
+@app.route("/api/stats")
+@login_required
+def api_stats():
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == current_user.id).first()
+
+    completed = db_sess.query(CompletedCipher).filter(
+        CompletedCipher.user_id == current_user.id
+    ).all()
+
+    by_level = {'easy': 0, 'normal': 0, 'medium': 0, 'hard': 0}
+    for c in completed:
+        by_level[c.cipher.level.name] += 1
+
+    return {
+        "login": user.login,
+        "rating": user.rating,
+        "solved_total": len(completed),
+        "solved_by_level": by_level
+    }
+
+
+# Топ 10 игроков
+@app.route("/api/top")
+def api_top():
+    db_sess = db_session.create_session()
+    top_users = db_sess.query(User).order_by(User.rating.desc()).limit(10).all()
+
+    return {
+        "top": [
+            {"login": u.login, "rating": u.rating}
+            for u in top_users
+        ]
+    }
+
+
+# Информация по каждому шифру
+@app.route("/api/levels")
+def api_levels():
+    db_sess = db_session.create_session()
+    ciphers = db_sess.query(Cipher).all()
+
+    return {
+        "levels": [
+            {
+                "number": c.number,
+                "name": c.name,
+                "difficulty": c.level.name,
+                "points": c.level.points,
+                "completed_count": len(c.completions)
+            }
+            for c in ciphers
+        ]
+    }
+
 
 if __name__ == "__main__":
 
