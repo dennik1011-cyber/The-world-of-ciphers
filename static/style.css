@@ -465,3 +465,20 @@ body.light .guide-box pre {
 body.light .setting-box input[type="range"] {
     accent-color: #2d5a00;
 }
+.top-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #00ff88;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+.avatar-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #00ff88;
+    margin-bottom: 20px;
+}

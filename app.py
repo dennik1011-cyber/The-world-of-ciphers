@@ -3,7 +3,8 @@ import random
 from faker import Faker
 
 from flask import Flask, render_template, request, redirect, make_response
-from flask_login import login_user, login_required, logout_user, LoginManager
+from flask_login import login_user, login_required, logout_user, LoginManager, current_user
+from werkzeug.utils import secure_filename
 
 from ciphers import easy, normal
 from data import db_session
@@ -11,12 +12,22 @@ from data.users import User
 from forms.users import RegisterForm, LoginForm
 from ciphers.constants import levels, cipher_guides
 
+
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'cipher_secret_key'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
 
 
 
@@ -267,6 +278,50 @@ def logout():
     logout_user()
     return redirect("/")
 
+from flask_login import login_user
+
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    message = None
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == current_user.id).first()
+
+    if request.method == 'POST':
+        if request.form.get('action') == 'delete':
+            if user.avatar:
+                old_file = os.path.join(app.config['UPLOAD_FOLDER'], user.avatar)
+                if os.path.exists(old_file):
+                    os.remove(old_file)
+                user.avatar = None
+                db_sess.commit()
+                message = 'Аватар удалён'
+            login_user(user, remember=True)  # обновляем сессию
+            return render_template('profile.html', user=user, message=message)
+
+        file = request.files.get('avatar')
+
+        if not file or file.filename == '':
+            message = 'Файл не выбран'
+        elif not allowed_file(file.filename):
+            message = 'Разрешены только PNG, JPG, JPEG, GIF'
+        else:
+            if user.avatar:
+                old_file = os.path.join(app.config['UPLOAD_FOLDER'], user.avatar)
+                if os.path.exists(old_file):
+                    os.remove(old_file)
+
+            ext = file.filename.rsplit('.', 1)[1].lower()
+            filename = secure_filename(f"avatar_{current_user.id}.{ext}")
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+
+            user.avatar = filename
+            db_sess.commit()
+            login_user(user, remember=True)  # обновляем сессию
+            message = 'Аватар обновлён!'
+
+    return render_template('profile.html', user=user, message=message)
 
 if __name__ == "__main__":
 

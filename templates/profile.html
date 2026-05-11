@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+
+<h1>Профиль</h1>
+
+<div class="profile-box">
+    <img src="{{ url_for('static', filename='uploads/' + (user.avatar if user.avatar else 'default_avatar.png')) }}"
+         alt="Аватар"
+         class="avatar-img">
+
+    <p class="user-login">{{ user.login }}</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Сменить аватар</label>
+            <input type="file" name="avatar" accept="image/*" class="form-input">
+        </div>
+        <button type="submit">Загрузить</button>
+    </form>
+
+    {% if user.avatar %}
+    <form method="POST" style="margin-top: 10px;">
+        <input type="hidden" name="action" value="delete">
+        <button type="submit" class="delete-button">Удалить аватар</button>
+    </form>
+    {% endif %}
+
+    {% if message %}
+    <p class="message">{{ message }}</p>
+    {% endif %}
+</div>
+
+<a href="/" class="menu-button">В меню</a>
+
+{% endblock %}
