@@ -3,11 +3,14 @@ import random
 from faker import Faker
 
 from flask import Flask, render_template, request, redirect, make_response
-from flask_login import login_user, login_required, logout_user, LoginManager, current_user
+from flask_login import login_required, logout_user, LoginManager, current_user
 from werkzeug.utils import secure_filename
 
 from ciphers import easy, normal, medium, hard
 from data import db_session
+from data.ciphers import Cipher
+from data.completed_cipher import CompletedCipher
+from data.db_session import seed_database
 from data.users import User
 from forms.users import RegisterForm, LoginForm
 from ciphers.constants import levels, cipher_guides
@@ -63,6 +66,22 @@ def play(level):
 
         if answer == original_word:
             result = "ПРАВИЛЬНО"
+
+            db_sess = db_session.create_session()
+            user = db_sess.query(User).filter(User.id == current_user.id).first()
+            cipher = db_sess.query(Cipher).filter(Cipher.number == level).first()
+
+            if cipher:
+                user.rating = (user.rating or 0) + cipher.level.points
+
+                completed = CompletedCipher(
+                    user_id=current_user.id,
+                    cipher_id=cipher.id
+                )
+                db_sess.add(completed)
+                db_sess.commit()
+
+                login_user(user, remember=True)
         else:
             result = "НЕПРАВИЛЬНО"
 
@@ -80,8 +99,12 @@ def play(level):
 
     if level <= 10:
         word = Faker('ru_RU').word().upper()
+        # Удобно для теста
+        # print(word)
     else:
         word = Faker('en_US').word().upper()
+        # Удобно для теста
+        # print(word)
 
     # EASY
 
@@ -328,7 +351,9 @@ if __name__ == "__main__":
 
     if not os.path.exists("db"):
         os.mkdir("db")
-
-    db_session.global_init("db/db.sqlite")
+        db_session.global_init("db/db.sqlite")
+        seed_database()
+    else:
+        db_session.global_init("db/db.sqlite")
 
     app.run(debug=True)

@@ -1,3 +1,5 @@
+import random
+
 ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 # 16. Rail Fence

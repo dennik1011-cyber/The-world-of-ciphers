@@ -482,3 +482,8 @@ body.light .setting-box input[type="range"] {
     border: 3px solid #00ff88;
     margin-bottom: 20px;
 }
+.user-rating {
+    font-size: 20px;
+    color: #ffcc00;
+    margin-bottom: 25px;
+}

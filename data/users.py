@@ -1,7 +1,6 @@
 import datetime
 import sqlalchemy
 from flask_login import UserMixin
-from sqlalchemy import orm
 from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -18,6 +17,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                       default=datetime.datetime.now, onupdate=datetime.datetime.now)
     avatar = sqlalchemy.Column(sqlalchemy.String, default=None)
+    rating = sqlalchemy.Column(sqlalchemy.Integer, default=0)
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
