@@ -1,5 +1,7 @@
 import os
 import random
+
+from dotenv import load_dotenv
 from faker import Faker
 
 from flask import Flask, render_template, request, redirect, make_response
@@ -15,11 +17,11 @@ from data.users import User
 from forms.users import RegisterForm, LoginForm
 from ciphers.constants import levels, cipher_guides
 
-UPLOAD_FOLDER = 'static/uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-
+load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'static/uploads')
+ALLOWED_EXTENSIONS = set(os.getenv('ALLOWED_EXTENSIONS', 'png,jpg,jpeg').split(','))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
