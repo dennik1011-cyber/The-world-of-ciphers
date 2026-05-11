@@ -24,10 +24,12 @@
     <button type="submit">Проверить</button>
 </form>
 
-<a href="/help/{{ level }}" class="help-button">💡 Нужна помощь?</a>
+<!--Вот тут bootstrap-->
+<div class="d-flex justify-content-center gap-2 mt-3">
+    <a href="/help/{{ level }}" class="btn btn-warning">💡 Нужна помощь?</a>
+    <a href="/" class="btn btn-secondary">В меню</a>
+</div>
 
 {% endif %}
-
-<a href="/" class="menu-button" style="margin-top: 10px;">В меню</a>
 
 {% endblock %}

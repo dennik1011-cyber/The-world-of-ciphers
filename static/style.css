@@ -266,23 +266,15 @@ button:hover {
     font-size: 17px;
     font-family: Arial;
 }
-.help-button {
-    display: inline-block;
-    margin: 15px auto;
-    padding: 12px 25px;
-    background: #21262d;
-    color: #ffcc00;
-    text-decoration: none;
-    border-radius: 10px;
-    border: 1px solid #ffcc00;
-    font-size: 16px;
-    transition: all 0.2s;
+
+.btn-warning {
+    padding: 15px 25px;
+    font-size: 18px;
 }
 
-.help-button:hover {
-    background: #ffcc00;
-    color: #0d1117;
-    border-color: #ffcc00;
+.btn-secondary {
+    padding: 15px 25px;
+    font-size: 18px;
 }
 
 body.light {
@@ -301,11 +293,11 @@ body.light::before {
     pointer-events: none;
     z-index: 9999;
     background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 0, 0, 0.03) 2px,
-        rgba(0, 0, 0, 0.03) 4px
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.03) 2px,
+            rgba(0, 0, 0, 0.03) 4px
     );
 }
 
@@ -465,6 +457,7 @@ body.light .guide-box pre {
 body.light .setting-box input[type="range"] {
     accent-color: #2d5a00;
 }
+
 .top-avatar {
     width: 28px;
     height: 28px;
@@ -474,6 +467,7 @@ body.light .setting-box input[type="range"] {
     vertical-align: middle;
     margin-right: 6px;
 }
+
 .avatar-img {
     width: 150px;
     height: 150px;
@@ -482,6 +476,7 @@ body.light .setting-box input[type="range"] {
     border: 3px solid #00ff88;
     margin-bottom: 20px;
 }
+
 .user-rating {
     font-size: 20px;
     color: #ffcc00;
