@@ -1,223 +1,127 @@
 import random
 
-ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+LOWER = ["а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н",
+         "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я"]
+UPPER = [i.upper() for i in LOWER]
 
 
-# 11. Виженер
-def vigenere_cipher(text, key="KEY"):
-    text = text.upper()
-    key = key.upper()
+# 6 Цезарь
+def caesar_cipher(text, shift=3):
+    result = ""
+
+    for letter in text:
+        if letter in LOWER:
+            idx = LOWER.index(letter) + shift
+            while idx >= len(LOWER):
+                idx -= len(LOWER)
+            while idx < 0:
+                idx += len(LOWER)
+            result += LOWER[idx]
+        elif letter in UPPER:
+            idx = UPPER.index(letter) + shift
+            while idx >= len(UPPER):
+                idx -= len(UPPER)
+            while idx < 0:
+                idx += len(UPPER)
+            result += UPPER[idx]
+        else:
+            result += letter
+
+    return result
+
+
+# 7 Атбаш
+def atbash_cipher(text):
+    REV_LOWER = LOWER[::-1]
+    REV_UPPER = UPPER[::-1]
 
     result = ""
-    key_index = 0
 
-    for char in text:
-        if char in ALPHABET:
-            t = ALPHABET.index(char)
-            k = ALPHABET.index(key[key_index % len(key)])
-
-            result += ALPHABET[(t + k) % 26]
-            key_index += 1
+    for letter in text:
+        if letter in LOWER:
+            result += REV_LOWER[LOWER.index(letter)]
+        elif letter in UPPER:
+            result += REV_UPPER[UPPER.index(letter)]
         else:
-            result += char
+            result += letter
 
-    return result, key
-
-
-# 12. Плейфер
-def playfair_cipher(text):
-    return f"PLAYFAIR-{text}"
+    return result
 
 
-# 13. Четыре квадрата
-def four_square_cipher(text):
-    return f"FOURSQUARE-{text}"
-
-
-# 14. Бэкон
-def bacon_cipher(text):
-    bacon = {
-        "A": "AAAAA",
-        "B": "AAAAB",
-        "C": "AAABA",
-        "D": "AAABB",
-        "E": "AABAA",
-        "F": "AABAB",
-        "G": "AABBA",
-        "H": "AABBB",
-        "I": "ABAAA",
-        "J": "ABAAB",
-        "K": "ABABA",
-        "L": "ABABB",
-        "M": "ABBAA",
-        "N": "ABBAB",
-        "O": "ABBBA",
-        "P": "ABBBB",
-        "Q": "BAAAA",
-        "R": "BAAAB",
-        "S": "BAABA",
-        "T": "BAABB",
-        "U": "BABAA",
-        "V": "BABAB",
-        "W": "BABBA",
-        "X": "BABBB",
-        "Y": "BBAAA",
-        "Z": "BBAAB",
+# 8 Морзе
+def morse_cipher(text):
+    morse = {
+        "А": ".-", "Б": "-...", "В": ".--", "Г": "--.", "Д": "-..",
+        "Е": ".", "Ж": "...-", "З": "--..", "И": "..", "Й": ".---",
+        "К": "-.-", "Л": ".-..", "М": "--", "Н": "-.", "О": "---",
+        "П": ".--.", "Р": ".-.", "С": "...", "Т": "-", "У": "..-",
+        "Ф": "..-.", "Х": "....", "Ц": "-.-.", "Ч": "---.", "Ш": "----",
+        "Щ": "--.-", "Ъ": "--.--", "Ы": "-.--", "Ь": "-..-", "Э": "..-..",
+        "Ю": "..--", "Я": ".-.-",
     }
 
     result = []
 
-    for char in text.upper():
-        if char in bacon:
-            result.append(bacon[char])
+    for letter in text.upper():
+        if letter == " ":
+            result.append("/")
+        elif letter in morse:
+            result.append(morse[letter])
+        else:
+            result.append(letter)
 
     return " ".join(result)
 
 
-# 15. Трисемус
-def trithemius_cipher(text):
-    result = ""
+# 9 Полибий
+def polybius_cipher(text):
+    result = []
 
-    for i, char in enumerate(text.upper()):
-        if char in ALPHABET:
-            idx = ALPHABET.index(char)
-            result += ALPHABET[(idx + i) % 26]
+    for letter in text:
+        if letter in LOWER:
+            idx = LOWER.index(letter)
+            row = idx // 6 + 1
+            col = idx % 6 + 1
+            result.append(str(row) + str(col))
+        elif letter in UPPER:
+            idx = UPPER.index(letter)
+            row = idx // 6 + 1
+            col = idx % 6 + 1
+            result.append(str(row) + str(col))
         else:
-            result += char
+            result.append(letter)
 
-    return result
-
-
-# 16. Rail Fence
-def rail_fence_cipher(text, rails=3):
-    fence = [[] for _ in range(rails)]
-
-    rail = 0
-    direction = 1
-
-    for char in text:
-        fence[rail].append(char)
-
-        rail += direction
-
-        if rail == rails - 1:
-            direction = -1
-        elif rail == 0:
-            direction = 1
-
-    return "".join("".join(row) for row in fence)
+    return " ".join(result)
 
 
-# 17. Колонная перестановка
-def column_cipher(text):
-    cols = 4
+# 10 Гронсфельд
+def gronsfeld_cipher(text, key=None):
+    if key is None:
+        key = str(random.randint(100, 999))
 
-    while len(text) % cols != 0:
-        text += "X"
-
-    rows = [text[i:i + cols] for i in range(0, len(text), cols)]
-
-    order = [1, 3, 0, 2]
+    digits = [int(d) for d in key]
 
     result = ""
+    key_idx = 0
 
-    for col in order:
-        for row in rows:
-            result += row[col]
+    for letter in text:
+        shift = digits[key_idx % len(digits)]
 
-    return result
-
-
-# 18. Вернам
-def vernam_cipher(text):
-    key = ''.join(random.choice(ALPHABET) for _ in range(len(text)))
-
-    result = ""
-
-    for t, k in zip(text.upper(), key):
-        if t in ALPHABET:
-            result += ALPHABET[
-                (ALPHABET.index(t) ^ ALPHABET.index(k)) % 26
-            ]
+        if letter in LOWER:
+            idx = LOWER.index(letter) + shift
+            while idx >= len(LOWER):
+                idx -= len(LOWER)
+            result += LOWER[idx]
+            key_idx += 1
+        elif letter in UPPER:
+            idx = UPPER.index(letter) + shift
+            while idx >= len(UPPER):
+                idx -= len(UPPER)
+            result += UPPER[idx]
+            key_idx += 1
         else:
-            result += t
+            result += letter
 
     return result, key
 
 
-# 19. Гамильтон
-def route_cipher(text):
-    size = 4
-
-    while len(text) < size * size:
-        text += "X"
-
-    matrix = []
-
-    idx = 0
-
-    for _ in range(size):
-        row = []
-
-        for _ in range(size):
-            row.append(text[idx])
-            idx += 1
-
-        matrix.append(row)
-
-    result = ""
-
-    top = 0
-    bottom = size - 1
-    left = 0
-    right = size - 1
-
-    while top <= bottom and left <= right:
-
-        for i in range(left, right + 1):
-            result += matrix[top][i]
-
-        top += 1
-
-        for i in range(top, bottom + 1):
-            result += matrix[i][right]
-
-        right -= 1
-
-        if top <= bottom:
-            for i in range(right, left - 1, -1):
-                result += matrix[bottom][i]
-
-            bottom -= 1
-
-        if left <= right:
-            for i in range(bottom, top - 1, -1):
-                result += matrix[i][left]
-
-            left += 1
-
-    return result
-
-
-# 20. Двойной
-def double_cipher(text):
-    shifted = ""
-
-    for char in text.upper():
-        if char in ALPHABET:
-            idx = (ALPHABET.index(char) + 3) % 26
-            shifted += ALPHABET[idx]
-        else:
-            shifted += char
-
-    reversed_alphabet = ALPHABET[::-1]
-
-    result = ""
-
-    for char in shifted:
-        if char in ALPHABET:
-            result += reversed_alphabet[ALPHABET.index(char)]
-        else:
-            result += char
-
-    return result

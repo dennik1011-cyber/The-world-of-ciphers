@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, redirect, make_response
 from flask_login import login_user, login_required, logout_user, LoginManager, current_user
 from werkzeug.utils import secure_filename
 
-from ciphers import easy, normal
+from ciphers import easy, normal, medium, hard
 from data import db_session
 from data.users import User
 from forms.users import RegisterForm, LoginForm
@@ -108,56 +108,57 @@ def play(level):
             level=level
         )
 
+    # NORMAL
     elif level == 6:
         shift = random.randint(1, 5)
-        cipher_text = easy.caesar_cipher(word, shift)
+        cipher_text = normal.caesar_cipher(word, shift)
         extra = f"Сдвиг: {shift}"
 
     elif level == 7:
-        cipher_text = easy.atbash_cipher(word)
+        cipher_text = normal.atbash_cipher(word)
 
     elif level == 8:
-        cipher_text = easy.morse_cipher(word)
+        cipher_text = normal.morse_cipher(word)
 
     elif level == 9:
-        cipher_text = easy.polybius_cipher(word)
+        cipher_text = normal.polybius_cipher(word)
 
     elif level == 10:
-        cipher_text, key = easy.gronsfeld_cipher(word)
+        cipher_text, key = normal.gronsfeld_cipher(word)
         extra = f"Ключ: {key}"
 
-    # NORMAL
-
+    #MEDIUM
     elif level == 11:
-        cipher_text, key = normal.vigenere_cipher(word)
+        cipher_text, key = medium.vigenere_cipher(word)
         extra = f"Ключ: {key}"
 
     elif level == 12:
-        cipher_text = normal.playfair_cipher(word)
+        cipher_text = medium.playfair_cipher(word)
 
     elif level == 13:
-        cipher_text = normal.four_square_cipher(word)
+        cipher_text = medium.four_square_cipher(word)
 
     elif level == 14:
-        cipher_text = normal.bacon_cipher(word)
+        cipher_text = medium.bacon_cipher(word)
 
     elif level == 15:
-        cipher_text = normal.trithemius_cipher(word)
+        cipher_text = medium.trithemius_cipher(word)
 
+    #HARD
     elif level == 16:
-        cipher_text = normal.rail_fence_cipher(word)
+        cipher_text = hard.rail_fence_cipher(word)
 
     elif level == 17:
-        cipher_text = normal.column_cipher(word)
+        cipher_text = hard.column_cipher(word)
 
     elif level == 18:
-        cipher_text = normal.vernam_cipher(word)
+        cipher_text = hard.vernam_cipher(word)
 
     elif level == 19:
-        cipher_text = normal.route_cipher(word)
+        cipher_text = hard.route_cipher(word)
 
     elif level == 20:
-        cipher_text = normal.double_cipher(word)
+        cipher_text = hard.double_cipher(word)
 
     else:
         cipher_text = word
