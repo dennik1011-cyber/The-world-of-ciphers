@@ -9,7 +9,6 @@ __factory = None
 
 
 def global_init(db_file):
-
     global __factory
 
     if __factory:
@@ -32,21 +31,18 @@ def global_init(db_file):
 
 
 def create_session() -> Session:
-
     global __factory
 
     return __factory()
 
 
 def seed_database():
-
     from .levels import Level
     from .ciphers import Cipher
 
     session = create_session()
 
     if not session.query(Level).first():
-
         levels = [
 
             Level(id=1, name='easy', points=50),

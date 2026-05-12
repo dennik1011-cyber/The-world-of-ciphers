@@ -1,5 +1,3 @@
-# app.py
-
 import os
 import random
 
@@ -50,8 +48,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def allowed_file(filename):
     return (
-        '.' in filename and
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+            '.' in filename and
+            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
     )
 
 
@@ -92,9 +90,6 @@ def help_page(level=None):
 @app.route("/play/<int:level>", methods=["GET", "POST"])
 @login_required
 def play(level):
-
-    result = None
-    correct = None
     extra = None
 
     # =========================
@@ -125,10 +120,9 @@ def play(level):
             )
 
             if cipher:
-
                 user.rating = (
-                    (user.rating or 0)
-                    + cipher.level.points
+                        (user.rating or 0)
+                        + cipher.level.points
                 )
 
                 completed = CompletedCipher(
@@ -162,8 +156,12 @@ def play(level):
 
     if level <= 10:
         word = Faker('ru_RU').word().upper()
+        # print(word)
+        # Удобно для теста
     else:
         word = Faker('en_US').word().upper()
+        # print(word)
+        # Удобно для теста
 
     # =========================
     # EASY
@@ -358,11 +356,10 @@ def play(level):
     )
 
 
+# Пока только настройка темы (светлая/тёмная)
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
-
     if request.method == 'POST':
-
         response = make_response(
             redirect('/settings')
         )
@@ -381,7 +378,6 @@ def settings():
 @app.route("/guide")
 @login_required
 def guide():
-
     return render_template(
         "guide.html",
         guides=cipher_guides
@@ -390,7 +386,6 @@ def guide():
 
 @login_manager.user_loader
 def load_user(user_id):
-
     session = db_session.create_session()
 
     return session.query(User).get(int(user_id))
@@ -398,13 +393,11 @@ def load_user(user_id):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-
     form = RegisterForm()
 
     if form.validate_on_submit():
 
         if form.password.data != form.password_again.data:
-
             return render_template(
                 'register.html',
                 form=form,
@@ -414,11 +407,10 @@ def register():
         db_sess = db_session.create_session()
 
         if (
-            db_sess.query(User)
-            .filter(User.login == form.login.data)
-            .first()
+                db_sess.query(User)
+                        .filter(User.login == form.login.data)
+                        .first()
         ):
-
             return render_template(
                 'register.html',
                 form=form,
@@ -444,7 +436,6 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -460,10 +451,9 @@ def login():
         )
 
         if (
-            user and
-            user.check_password(form.password.data)
+                user and
+                user.check_password(form.password.data)
         ):
-
             login_user(
                 user,
                 remember=form.remember_me.data
@@ -486,7 +476,6 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
-
     logout_user()
 
     return redirect("/")
@@ -495,7 +484,6 @@ def logout():
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-
     message = None
 
     db_sess = db_session.create_session()
@@ -591,10 +579,10 @@ def profile():
     )
 
 
+# Рейтинг и количество решенных шифров по категориям пользователя
 @app.route("/api/stats")
 @login_required
 def api_stats():
-
     db_sess = db_session.create_session()
 
     user = (
@@ -629,9 +617,9 @@ def api_stats():
     }
 
 
+# Топ 10 игроков
 @app.route("/api/top")
 def api_top():
-
     db_sess = db_session.create_session()
 
     top_users = (
@@ -652,9 +640,9 @@ def api_top():
     }
 
 
+# Информация по каждому шифру
 @app.route("/api/levels")
 def api_levels():
-
     db_sess = db_session.create_session()
 
     ciphers = db_sess.query(Cipher).all()
@@ -677,9 +665,9 @@ if __name__ == "__main__":
 
     if not os.path.exists("db"):
         os.mkdir("db")
+        db_session.global_init("db/db.sqlite")
+        seed_database()
 
     db_session.global_init("db/db.sqlite")
-
-    seed_database()
 
     app.run(debug=True)

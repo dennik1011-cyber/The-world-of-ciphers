@@ -80,4 +80,3 @@ def first_letter_cipher(text):
     phrase = random.choice(phrases)
 
     return phrase[1], phrase[0]
-

@@ -2,6 +2,7 @@ import random
 
 ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+
 # 16. Rail Fence
 def rail_fence_cipher(text, rails=3):
     fence = [[] for _ in range(rails)]
@@ -52,7 +53,7 @@ def vernam_cipher(text):
         if t in ALPHABET:
             result += ALPHABET[
                 (ALPHABET.index(t) ^ ALPHABET.index(k)) % 26
-            ]
+                ]
         else:
             result += t
 

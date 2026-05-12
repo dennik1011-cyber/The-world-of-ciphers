@@ -123,5 +123,3 @@ def gronsfeld_cipher(text, key=None):
             result += letter
 
     return result, key
-
-
