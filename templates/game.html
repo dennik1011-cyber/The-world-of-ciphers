@@ -1,33 +1,86 @@
 {% extends "base.html" %}
-{% block title %}{{ level_name }}{% endblock %}
+
+{% block title %}
+{{ level_name }}
+{% endblock %}
 
 {% block content %}
 
 <h1>{{ level_name }}</h1>
 
-<div class="cipher-box">{{ cipher }}</div>
+<div class="cipher-box">
+    {{ cipher }}
+</div>
+
+{% if extra %}
+<div class="correct">
+    {{ extra }}
+</div>
+{% endif %}
 
 {% if result %}
 
-<div class="result">{{ result }}</div>
-<div class="correct">Правильный ответ: {{ correct }}</div>
+<div class="result">
+    {{ result }}
+</div>
 
-<a href="/" class="menu-button">В меню</a>
-<a href="/play/{{ level }}" class="menu-button">Продолжить</a>
+<div class="correct">
+    Правильный ответ: {{ correct }}
+</div>
+
+<a href="/" class="menu-button">
+    В меню
+</a>
+
+<a href="/play/{{ level }}" class="menu-button">
+    Продолжить
+</a>
 
 {% else %}
 
 <form method="POST">
-    <input type="text" name="answer" placeholder="Введите ответ" required>
-    <input type="hidden" name="original" value="{{ original }}">
-    <input type="hidden" name="cipher" value="{{ cipher }}">
-    <button type="submit">Проверить</button>
+
+    <input
+        type="text"
+        name="answer"
+        placeholder="Введите ответ"
+        required
+    >
+
+    <input
+        type="hidden"
+        name="original"
+        value="{{ original }}"
+    >
+
+    <input
+        type="hidden"
+        name="cipher"
+        value="{{ cipher }}"
+    >
+
+    <input
+        type="hidden"
+        name="extra"
+        value="{{ extra }}"
+    >
+
+    <button type="submit">
+        Проверить
+    </button>
+
 </form>
 
-<!--Вот тут bootstrap-->
 <div class="d-flex justify-content-center gap-2 mt-3">
-    <a href="/help/{{ level }}" class="btn btn-warning">💡 Нужна помощь?</a>
-    <a href="/" class="btn btn-secondary">В меню</a>
+
+    <a href="/help/{{ level }}" class="btn btn-warning">
+        💡 Нужна помощь?
+    </a>
+
+    <a href="/" class="btn btn-secondary">
+        В меню
+    </a>
+
 </div>
 
 {% endif %}

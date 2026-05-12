@@ -1,5 +1,6 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
+
 from sqlalchemy.orm import Session
 
 SqlAlchemyBase = orm.declarative_base()
@@ -8,6 +9,7 @@ __factory = None
 
 
 def global_init(db_file):
+
     global __factory
 
     if __factory:
@@ -17,34 +19,47 @@ def global_init(db_file):
         raise Exception("Необходимо указать файл базы данных.")
 
     conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
+
     print(f"Подключение к базе данных по адресу {conn_str}")
 
     engine = sa.create_engine(conn_str, echo=False)
+
     __factory = orm.sessionmaker(bind=engine)
 
     from . import __all_models
 
     SqlAlchemyBase.metadata.create_all(engine)
-    
 
 
 def create_session() -> Session:
+
     global __factory
+
     return __factory()
 
+
 def seed_database():
-    session = db_session.create_session()
+
+    from .levels import Level
+    from .ciphers import Cipher
+
+    session = create_session()
 
     if not session.query(Level).first():
+
         levels = [
+
             Level(id=1, name='easy', points=50),
             Level(id=2, name='normal', points=100),
             Level(id=3, name='medium', points=150),
             Level(id=4, name='hard', points=200),
+
         ]
+
         session.add_all(levels)
 
         ciphers = [
+
             Cipher(number=1, name='Шифр наоборот', level_id=1),
             Cipher(number=2, name='Шифр замены букв символами', level_id=1),
             Cipher(number=3, name='Каждая вторая буква', level_id=1),
@@ -68,6 +83,9 @@ def seed_database():
             Cipher(number=18, name='Шифр Вернама', level_id=4),
             Cipher(number=19, name='Шифр Гамильтона', level_id=4),
             Cipher(number=20, name='Двойной шифр', level_id=4),
+
         ]
+
         session.add_all(ciphers)
+
         session.commit()
